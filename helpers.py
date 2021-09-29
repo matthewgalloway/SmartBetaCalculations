@@ -51,6 +51,6 @@ def get_stock_price(url, key):
             failed_symbols.append(symbol)
 
     snp_components_timeseries = rename_columns(snp_components_timeseries)
-    snp_components_timeseries = breakdown_by_ticker(snp_components_timeseries)
+    snp_components_timeseries = breakdown_by_ticker('adjusted_close', snp_components_timeseries)
 
     return snp_components_timeseries
