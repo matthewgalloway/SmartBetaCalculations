@@ -3,6 +3,8 @@ from helpers import *
 import pandas as pd
 from api_setup import make_api_call
 import time
+from dataiku import pandasutils as pdu
+import dataiku
 
 def reset_header(df):
 #   changes the first row of the df to the column names
@@ -60,3 +62,11 @@ def calc_cumilative_weighted_returns(returns, weights):
     daily_returns = weighted_returns.sum(axis=1)
     cumulative_returns = 1 + daily_returns.cumsum()
     return pd.DataFrame(cumulative_returns)
+
+
+def get_input_data_and_set_date_index(var, set_date=True):
+    dk_obj = dataiku.Dataset(var)
+    df = dk_obj.get_dataframe()
+    if set_date:
+        df.set_index('date',inplace=True)
+    return df
