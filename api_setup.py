@@ -1,4 +1,4 @@
-from alpha_vantage_api.timeseries import TimeSeries
+from alpha_vantage_api.alpha_vantage.timeseries import TimeSeries
 
 def make_api_call(symbol, key):
     ts = TimeSeries(key=key, output_format='pandas')
