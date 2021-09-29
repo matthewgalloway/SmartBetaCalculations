@@ -21,7 +21,7 @@ def get_stocks_from_wiki(url):
 
 def get_stock_price(url):
     stocks_df = get_stocks_from_wiki(url)
-    stocks_list = list(set(stocks_df.Symbol))
+    stocks_list = list(set(stocks_df.MMM))
 
     snp_components_timeseries = pd.DataFrame()
     failed_symbols =[]
@@ -33,5 +33,5 @@ def get_stock_price(url):
             snp_components_timeseries = snp_components_timeseries.append(component_data)
         except:
             failed_symbols.append(symbol)
-            
+
     return snp_components_timeseries
