@@ -16,3 +16,4 @@ def get_html_table(url):
 def get_stocks_from_wiki(url):
     stocks_df = get_html_table(url)
     stocks_df = reset_header(stocks_df)
+    return stocks_df
