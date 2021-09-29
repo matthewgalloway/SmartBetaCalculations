@@ -19,7 +19,23 @@ def get_stocks_from_wiki(url):
     stocks_df = reset_header(stocks_df)
     return stocks_df
 
-def get_stock_price(url):
+def rename_columns(df):
+    df_cols = df.columns
+    new_df_cols = []
+    for col in df_cols:
+        if len(col.split())>1:
+            new_df_cols.append(col.split()[1])
+        else:
+            new_df_cols.append(col)
+    df.columns = new_df_cols
+    df.rename(columns={'adjusted':'adjusted_close'},inplace=True)
+    return df
+
+def breakdown_by_ticker(variable, df):
+    var_df = df.reset_index().pivot(index='date', columns='symbol', values=variable)
+    return var_df
+
+def get_stock_price(url, key):
     stocks_df = get_stocks_from_wiki(url)
     stocks_list = list(set(stocks_df.MMM))
 
@@ -28,10 +44,13 @@ def get_stock_price(url):
 
     for symbol in stocks_list:
         try:
-            time.sleep(1)
-            component_data = make_api_call(symbol)
+            component_data = make_api_call(symbol, key)
             snp_components_timeseries = snp_components_timeseries.append(component_data)
+            time.sleep(1)
         except:
             failed_symbols.append(symbol)
+
+    snp_components_timeseries = rename_columns(snp_components_timeseries)
+    snp_components_timeseries = breakdown_by_ticker(snp_components_timeseries)
 
     return snp_components_timeseries
