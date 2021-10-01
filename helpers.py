@@ -58,7 +58,9 @@ def get_stock_price(url, key):
     return snp_components_timeseries
 
 def calc_cumilative_weighted_returns(returns, weights):
-    weighted_returns = returns * weights
+    start = weights.index.min()
+    end = weights.index.max()
+    weighted_returns = returns[start:end] * weights
     daily_returns = weighted_returns.sum(axis=1)
     cumulative_returns = 1 + daily_returns.cumsum()
     return pd.DataFrame(cumulative_returns)
