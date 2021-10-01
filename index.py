@@ -62,7 +62,10 @@ class SmartBetaIndex:
         low_vol_stocks_dict = {}
         last_time_period = df.index.max()
 
-        low_vol_stocks_dict[last_time_period] = df.sum().nsmallest(self.basket_size).to_dict()
+        threshold = 0.00  # to force positve values
+        stock_above_thresh = df.sum()[df.sum() > threshold].index
+
+        low_vol_stocks_dict[last_time_period] = df[stock_above_thresh].sum().nsmallest(self.basket_size).to_dict()
 
         # calculates weights using volatility
         volatility_weights = pd.DataFrame.from_dict(low_vol_stocks_dict, orient='index').apply(
